@@ -1,0 +1,5 @@
+numpy
+face_recognition
+datasets
+oracledb
+pandas

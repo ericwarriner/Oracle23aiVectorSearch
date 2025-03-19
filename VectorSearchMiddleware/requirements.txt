@@ -1,0 +1,8 @@
+Flask
+gunicorn
+face_recognition
+numpy
+datasets
+oracledb
+Pillow
+python-dotenv
