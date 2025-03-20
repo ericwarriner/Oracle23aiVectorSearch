@@ -14,6 +14,14 @@ The **VectorSearchMiddleware** is a Flask-based middleware proxy that provides a
 - **Face Recognition:**  
   Uses the `face_recognition` library to generate embedding vectors from images.
 
+## 🐍 Installation
+
+### Clone the Repository
+```bash
+git clone https://github.com/ericwarriner/Oracle23aiVectorSearch.git
+cd VectorSearchMiddleware
+```
+
 ## ⚙️ Environment Variables
 
 Before running this middleware, ensure the following environment variables are set:
@@ -50,7 +58,9 @@ The following Python packages are required:
 - `python-dotenv`
 
 These can be installed from the `requirements.txt` file.
-
+```bash
+pip install -r requirements.txt
+```
 
 ## 🚢 Deployment
 

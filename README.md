@@ -41,10 +41,6 @@ You can export this in your terminal session or place it in a local `.env` file.
 
 ---
 
-## 🔨 Development
-
-
-
 ## 🐳 Docker Support
 
 ### Build the Docker Image

@@ -1,4 +1,3 @@
-
 ---
 
 # Vector Search Python Service
@@ -16,6 +15,13 @@ It leverages machine learning datasets and processes facial encodings for advanc
 - **Efficient Search**: Perform fast vector similarity search operations.
 
 ---
+## 🐍 Installation
+
+### Clone the Repository
+```bash
+git clone https://github.com/ericwarriner/Oracle23aiVectorSearch.git
+cd VectorSearchDatabasePopulationTool
+```
 
 ## 📦 Dependencies
 
@@ -25,9 +31,12 @@ The following Python packages are required:
 - `face_recognition`
 - `datasets` (from Hugging Face)
 - `oracledb`
+- `pandas`
 
 These can be installed from the `requirements.txt` file.
-
+```bash
+pip install -r requirements.txt
+```
 ---
 
 ## ⚙️ Prerequisites
@@ -47,22 +56,19 @@ If you're using **thick mode** with `oracledb`, you'll need Oracle Instant Clien
 
 ---
 
-## 🐍 Installation
+### Add .env file
 
-### Clone the Repository
+For **Linux/macOS**, run:
 ```bash
-git clone https://github.com/your-org/vector-search-python-service.git
-cd vector-search-python-service
+touch .env
 ```
-
-### Install Python Dependencies
-It’s recommended to use a Python virtual environment:
-
+For **Windows**, run:
 ```bash
-python3 -m venv venv
-source venv/bin/activate
-pip install --upgrade pip
-pip install -r requirements.txt
+type nul > .env
+```
+For **Windows PowerShell**, run:
+```bash
+New-Item -Path .env -ItemType File
 ```
 
 ---
@@ -73,7 +79,7 @@ pip install -r requirements.txt
 .
 ├── README.md
 ├── requirements.txt
-├── main.py
+├── face.py
 
 ```
 
@@ -104,16 +110,8 @@ DB_DSN=129.153.38.218/freepdb1
 2. Run the main script:
 
 ```bash
-python main.py
+python face.py
 ```
-
----
-
-## 🖼️ Example Application (Web Frontend)
-
-This Python service can be integrated with a web application like the one shown below, powered by Oracle 23ai Database and vector search.
-
-![Application Preview](https://storage.googleapis.com/www.ericwarriner.com/VectorSearch.JPG)
 
 ---
 
