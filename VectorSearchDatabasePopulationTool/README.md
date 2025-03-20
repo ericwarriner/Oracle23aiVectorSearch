@@ -115,6 +115,9 @@ DB_DSN=129.153.38.218/freepdb1
 python face.py
 ```
 
+
+3. Running the main script will iterate through approx. 100,000 images. You may stop the script short if you do not require that many images for demonstration purposes.
+
 ---
 
 ## ⚖️ Legal Disclaimer
