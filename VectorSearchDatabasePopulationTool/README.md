@@ -1,9 +1,10 @@
 ---
 
-# Vector Search Python Service
+# Vector Search Database Population Tool
 
-This Python project demonstrates vector search capabilities using face recognition and Oracle's 23ai Converged Database. 
-It leverages machine learning datasets and processes facial encodings for advanced search and analysis.
+This Python project helps populate an Oracle 23ai vector database so that vector search capabilities using face recognition may be achieved. It leverages machine learning datasets and processes facial encodings for advanced search and analysis.
+
+The primary dataset used in this tool is sourced from the Hugging Face project [ashraq/tmdb-people-image](https://huggingface.co/datasets/ashraq/tmdb-people-image), which provides a collection of images for facial recognition tasks.
 
 ---
 
@@ -15,12 +16,25 @@ It leverages machine learning datasets and processes facial encodings for advanc
 - **Efficient Search**: Perform fast vector similarity search operations.
 
 ---
+
 ## 🐍 Installation
 
 ### Clone the Repository
 ```bash
 git clone https://github.com/ericwarriner/Oracle23aiVectorSearch.git
 cd VectorSearchDatabasePopulationTool
+```
+
+## ⚙️ Prerequisites
+
+Before installing the Python packages, ensure the following system dependencies are in place (especially for `face_recognition` which relies on `dlib`):
+
+### Ubuntu / Debian-based Systems
+```bash
+sudo apt-get update
+sudo apt-get install -y build-essential cmake
+sudo apt-get install -y libopenblas-dev liblapack-dev
+sudo apt-get install -y libx11-dev libgtk-3-dev
 ```
 
 ## 📦 Dependencies
@@ -38,18 +52,6 @@ These can be installed from the `requirements.txt` file.
 pip install -r requirements.txt
 ```
 ---
-
-## ⚙️ Prerequisites
-
-Before installing the Python packages, ensure the following system dependencies are in place (especially for `face_recognition` which relies on `dlib`):
-
-### Ubuntu / Debian-based Systems
-```bash
-sudo apt-get update
-sudo apt-get install -y build-essential cmake
-sudo apt-get install -y libopenblas-dev liblapack-dev
-sudo apt-get install -y libx11-dev libgtk-3-dev
-```
 
 ### Oracle Client (Optional for `oracledb` Thick Mode)
 If you're using **thick mode** with `oracledb`, you'll need Oracle Instant Client libraries. See the [Oracle Installation Guide](https://www.oracle.com/database/technologies/instant-client/downloads.html) for more details.

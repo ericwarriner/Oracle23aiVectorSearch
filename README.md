@@ -72,17 +72,6 @@ docker push <REGION>-docker.pkg.dev/<PROJECT_ID>/<REPOSITORY>/<IMAGE_NAME>:lates
 ---
 
 
-## ⚖️ Legal Disclaimer
-
-This application demonstrates **Vector Search** powered by an [**Oracle 23ai Converged Database**](https://www.oracle.com/database/23ai/).  
-Oracle, the Oracle logo, and Oracle 23ai are trademarks or registered trademarks of Oracle and/or its affiliates.  
-
-This project is an independent application that utilizes Oracle technology. It is **not affiliated with**, **endorsed by**, or **sponsored by Oracle Corporation**.  
-Any Oracle trademarks used in this project are solely for the purpose of identifying the underlying technology and are the property of Oracle.
-
-If you are an Oracle representative and have concerns about this usage, please contact me to resolve the matter.
-
----
 
 ## 📂 Project Structure
 
@@ -93,6 +82,19 @@ If you are an Oracle representative and have concerns about this usage, please c
 ├── VectorSearchUserInterface               # Default UI and Application entry point
 
 ```
+
+---
+
+
+## ⚖️ Legal Disclaimer
+
+This application demonstrates **Vector Search** powered by an [**Oracle 23ai Converged Database**](https://www.oracle.com/database/23ai/).  
+Oracle, the Oracle logo, and Oracle 23ai are trademarks or registered trademarks of Oracle and/or its affiliates.  
+
+This project is an independent application that utilizes Oracle technology. It is **not affiliated with**, **endorsed by**, or **sponsored by Oracle Corporation**.  
+Any Oracle trademarks used in this project are solely for the purpose of identifying the underlying technology and are the property of Oracle.
+
+If you are an Oracle representative and have concerns about this usage, please contact me to resolve the matter.
 
 ---
 

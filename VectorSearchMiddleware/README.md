@@ -91,3 +91,32 @@ python [main.py]
 
 
 Make sure your environment variables are configured correctly before starting the server.
+
+
+
+
+## ⚖️ Legal Disclaimer
+
+This project demonstrates vector search powered by an **Oracle 23ai Converged Database**.  
+Oracle, the Oracle logo, and Oracle 23ai are trademarks or registered trademarks of Oracle and/or its affiliates.
+
+This project is an independent demonstration and is **not affiliated with**, **endorsed by**, or **sponsored by Oracle Corporation**.  
+Any Oracle trademarks used in this project are solely for the purpose of identifying the underlying technology and are the property of Oracle.
+
+If you are an Oracle representative and have concerns about this usage, please contact me to resolve the matter.
+
+---
+
+## 🙌 Contributing
+
+Contributions are welcome!  
+Feel free to fork the repository, make changes, and submit a pull request.  
+For major changes, please open an issue first to discuss what you’d like to change.
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).
+
+---
