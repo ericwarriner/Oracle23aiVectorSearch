@@ -1,3 +1,6 @@
 # Ignore all .env files in any directory
 *.env
 .env.*
+VectorSearch*/notes.txt
+VectorSearch*/cached_tmdb_people_image/*
+

@@ -25,7 +25,8 @@ git clone https://github.com/ericwarriner/Oracle23aiVectorSearch.git
 cd VectorSearchDatabasePopulationTool
 ```
 
-## ⚙️ Prerequisites
+## 📦 Prerequisites
+- Oracle 23ai instance
 
 Before installing the Python packages, ensure the following system dependencies are in place (especially for `face_recognition` which relies on `dlib`):
 

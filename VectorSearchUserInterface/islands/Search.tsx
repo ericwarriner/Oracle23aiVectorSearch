@@ -99,7 +99,6 @@ export default function ImageGallery() {
                 reader.onloadend = () => {
                   const base64String = reader.result as string;
                   setUploadedImage(base64String);
-                  console.log("Base64 Encoded Image:", base64String);
                 };
                 reader.readAsDataURL(file);
               }
@@ -127,14 +126,14 @@ export default function ImageGallery() {
           </div>
           <div class="flex items-center">
             <label htmlFor="toleranceVar" class="mr-2">
-              Tolerance:
+              Distance:
             </label>
             <input
               type="range"
               id="toleranceVar"
-              min="0.01"
-              max="1"
-              step="0.01"
+              min="0.00"
+              max=".8"
+              step="0.03"
               value={toleranceVar}
               onChange={handleToleranceVarChange}
               class="mr-2"
@@ -149,7 +148,7 @@ export default function ImageGallery() {
             <input
               type="number"
               id="minAge"
-              min="0"
+              min="20"
               max="100"
               value={minAge}
               onChange={(e) => setMinAge(Number((e.target as HTMLInputElement).value))}
@@ -161,7 +160,7 @@ export default function ImageGallery() {
             <input
               type="number"
               id="maxAge"
-              min="0"
+              min="20"
               max="100"
               value={maxAge}
               onChange={(e) => setMaxAge(Number((e.target as HTMLInputElement).value))}
@@ -196,22 +195,26 @@ export default function ImageGallery() {
       ) : error ? (
         <div class="text-center text-red-500">Error: {error}</div>
       ) : apiCalled ? (
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {encodedFaces.map((face) => (
-            <div
-              key={face.id}
-              class="rounded-lg overflow-hidden shadow-md bg-white dark:bg-gray-500 p-3"
-            >
-              <h2 class="text-lg font-bold mb-1">{face.name}</h2>
-              <p class="text-xs font-medium mb-2">Distance = {face.distance}</p>
-              <img
-                src={`data:image/png;base64,${face.image_base64}`}
-                alt={`Image ${face.id}`}
-                class="w-full h-auto"
-              />
-            </div>
-          ))}
-        </div>
+        encodedFaces.length === 0 ? (
+          <div class="text-center">There are results that match your query within the specified vector distance. Please consider adjusting the parameters of the query</div>
+        ) : (
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {encodedFaces.map((face) => (
+              <div
+                key={face.id}
+                class="rounded-lg overflow-hidden shadow-md bg-white dark:bg-gray-500 p-3"
+              >
+                <h2 class="text-lg font-bold mb-1">{face.name}</h2>
+                <p class="text-xs font-medium mb-2">Distance = {face.distance}</p>
+                <img
+                  src={`data:image/png;base64,${face.image_base64}`}
+                  alt={`Image ${face.id}`}
+                  class="w-full h-auto"
+                />
+              </div>
+            ))}
+          </div>
+        )
       ) : (
         <div class="text-center flex flex-col items-center">
           Upload an image to get started.

@@ -16,6 +16,13 @@ The **VectorSearchMiddleware** is a Flask-based middleware proxy that provides a
 
 ## 🐍 Installation
 
+
+## 📦 Prerequisites
+- Docker (optional, for containerization)
+- Oracle OCI or Google Cloud SDK (optional, for pushing Docker images)
+- Oracle 23ai instance
+
+
 ### Clone the Repository
 ```bash
 git clone https://github.com/ericwarriner/Oracle23aiVectorSearch.git
