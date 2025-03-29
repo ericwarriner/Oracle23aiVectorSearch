@@ -3,7 +3,7 @@
 
 Below is a preview of the application user interface.
 
-![Application Preview](https://storage.googleapis.com/www.ericwarriner.com/VectorSearch.JPG)
+![Application Preview](https://storage.googleapis.com/www.ericwarriner.com/VectorSearch1.JPG)
 
 
 ---
