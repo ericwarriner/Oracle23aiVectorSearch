@@ -1,8 +1,6 @@
 import { useState, useEffect, useRef } from "preact/hooks";
 import { h } from "preact";
 
-// Removed UploadStatus type
-
 interface EncodeFaceResponse {
   distance: number;
   id: number;
@@ -12,11 +10,11 @@ interface EncodeFaceResponse {
 
 export default function ImageGallery() {
   const [encodedFaces, setEncodedFaces] = useState<EncodeFaceResponse[]>([]);
-  // Reverted state variables
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [apiCalled, setApiCalled] = useState(false); // Track if API has been called at least once
+  const [apiCalled, setApiCalled] = useState(false);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [uploadStatus, setUploadStatus] = useState<string>(""); // New state for status messages
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [numRows, setNumRows] = useState(10);
   const [toleranceVar, setToleranceVar] = useState(0.05);
@@ -50,18 +48,17 @@ export default function ImageGallery() {
     };
   }, []); // Empty dependency array ensures this runs once on mount
 
-  // Define fetchImages function separately
   async function fetchImages() {
     if (!uploadedImage) {
       console.warn("fetchImages called without an uploaded image.");
-      // Clear previous results if image is gone
       setEncodedFaces([]);
       setApiCalled(false);
       setError(null);
       return;
     }
-    setLoading(true); // Set loading true
-    setApiCalled(false); // Reset apiCalled flag for new fetch
+    setLoading(true);
+    setUploadStatus("Processing image and fetching results...");
+    setApiCalled(false);
     setError(null);
     try {
       const response = await fetch(
@@ -74,35 +71,33 @@ export default function ImageGallery() {
       );
       if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(
-          `HTTP error! status: ${response.status} - ${errorText}`
-        );
+        throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
       }
       const data: EncodeFaceResponse[] = await response.json();
       setEncodedFaces(data);
-      setApiCalled(true); // Set apiCalled true on success
+      setApiCalled(true);
+      setUploadStatus(data.length === 0 ? "No results found." : "Results loaded successfully.");
     } catch (e) {
       setError((e as Error).message);
-      setApiCalled(true); // Also set true on error to show error message instead of initial placeholder
+      setApiCalled(true);
+      setUploadStatus("An error occurred while processing the image.");
       console.error("Failed to encode face:", e);
     } finally {
-      setLoading(false); // Set loading false
+      setLoading(false);
     }
   }
 
-  // Effect ONLY for fetching images when image or parameters change
   useEffect(() => {
-    // Fetch whenever uploadedImage is set or parameters change while image is present
     if (uploadedImage) {
-       fetchImages();
+      fetchImages();
     } else {
-       // Reset state if the image is cleared
-       setEncodedFaces([]);
-       setError(null);
-       setApiCalled(false);
-       setLoading(false); // Ensure loading is false if image is cleared
+      setEncodedFaces([]);
+      setError(null);
+      setApiCalled(false);
+      setLoading(false);
+      setUploadStatus("");
     }
-  }, [uploadedImage, numRows, toleranceVar, minAge, maxAge]); // Keep dependencies
+  }, [uploadedImage, numRows, toleranceVar, minAge, maxAge]);
 
   const handleButtonClick = () => fileInputRef.current?.click();
   const handleNumRowsChange = (event: Event) =>
@@ -112,19 +107,17 @@ export default function ImageGallery() {
   const toggleDarkMode = () => setIsDarkMode((prev) => !prev);
 
   return (
-    <div class="min-h-screen container mx-auto p-4 sm:p-6 md:p-10 text-gray-900 dark:text-gray-100 transition-colors duration-200 drop-shadow-xl"> {/* Removed bg-zinc-200 dark:bg-zinc-700 */}
+    <div class="min-h-screen container mx-auto p-4 sm:p-6 md:p-10 text-gray-900 dark:text-gray-100 transition-colors duration-200 drop-shadow-xl">
       {/* Dynamically Sticky Title Bar */}
-      <header class={`px-4 py-2 mb-6 flex flex-col items-center border-b border-gray-300 dark:border-gray-600 ${isHeaderSticky ? 'sticky top-0 z-50' : ''}`}> {/* Conditional sticky classes */}
+      <header class={`px-4 py-2 mb-6 flex flex-col items-center border-b border-gray-300 dark:border-gray-600 ${isHeaderSticky ? 'sticky top-0 z-50' : ''}`}>
         <img src="/oracle.svg" alt="Logo" class="w-96 h-40" />
-        {/* Removed gradient class, added text-white */}
         <h1 class="text-4xl font-bold text-center exo-regular text-white">
           Vector Search powered by a Oracle 23ai Converged Database
         </h1>
       </header>
 
-      <div class="flex flex-col sm:flex-row items-start justify-between mb-6 space-y-4 sm:space-y-0"> {/* Changed items-center to items-start */}
-        {/* Left Group: Upload and Dark Mode Buttons (Vertical) */}
-        <div class="flex flex-col items-center space-y-4"> {/* Changed to flex-col and space-y-4 */}
+      <div class="flex flex-col sm:flex-row items-start justify-between mb-6 space-y-4 sm:space-y-0">
+        <div class="flex flex-col items-center space-y-4">
           <button
             type="button"
             onClick={handleButtonClick}
@@ -132,7 +125,6 @@ export default function ImageGallery() {
           >
             Upload Image
           </button>
-          {/* Moved Dark Mode Button Here */}
           <button
             type="button"
             onClick={toggleDarkMode}
@@ -145,41 +137,40 @@ export default function ImageGallery() {
             accept="image/*"
             onChange={(e) => {
               const file = (e.target as HTMLInputElement).files?.[0];
-              // Clear previous state immediately upon file selection
+              setUploadStatus("Uploading image...");
               setEncodedFaces([]);
-              setUploadedImage(null); // Clear image first to trigger useEffect reset if needed
+              setUploadedImage(null);
               setError(null);
               setApiCalled(false);
-              setLoading(false); // Ensure loading stops if a new file is chosen mid-load
+              setLoading(false);
 
               if (file) {
-                // No status setting here
                 const reader = new FileReader();
                 reader.onloadend = () => {
-                  // Set the image state *after* reading is complete
                   const base64String = reader.result as string;
-                  setUploadedImage(base64String); // This will trigger useEffect to fetch
+                  setUploadedImage(base64String);
+                  setUploadStatus("Image uploaded successfully.");
                 };
                 reader.onerror = () => {
                   setError("Failed to read file.");
-                  setUploadedImage(null); // Ensure image is null on error
-                  setApiCalled(true); // Show error
+                  setUploadStatus("Upload failed.");
+                  setUploadedImage(null);
+                  setApiCalled(true);
                 };
                 reader.readAsDataURL(file);
+              } else {
+                setUploadStatus("");
               }
-              // No else needed, clearing state above handles cancellation
             }}
             style={{ display: "none" }}
             ref={fileInputRef}
           />
+
         </div>
-        {/* Right Group: Sliders (Vertical) next to Age Inputs (Vertical) */}
-        <div class="flex flex-row items-start space-x-6"> {/* Main container is now flex-row */}
-          {/* Slider Group (Vertical) */}
-          <div class="flex flex-col space-y-4"> {/* Adjusted vertical spacing */}
-            {/* Number of Rows Slider - Using Grid */}
-            <div class="grid grid-cols-[auto_1fr_auto] items-center gap-x-2"> {/* Grid layout */}
-              <label htmlFor="numRows" class="text-right"> {/* Rely on grid column */}
+        <div class="flex flex-row items-start space-x-6">
+          <div class="flex flex-col space-y-4">
+            <div class="grid grid-cols-[auto_1fr_auto] items-center gap-x-2">
+              <label htmlFor="numRows" class="text-right">
                 Num Rows:
               </label>
               <input
@@ -189,13 +180,12 @@ export default function ImageGallery() {
                 max="20"
                 value={numRows}
                 onChange={handleNumRowsChange}
-                class="" /* Grid handles sizing */
+                class=""
               />
-              <span class="text-left">{numRows}</span> {/* Rely on grid column */}
+              <span class="text-left">{numRows}</span>
             </div>
-            {/* Distance Slider - Using Grid */}
-            <div class="grid grid-cols-[auto_1fr_auto] items-center gap-x-2"> {/* Grid layout */}
-              <label htmlFor="toleranceVar" class="text-right"> {/* Rely on grid column */}
+            <div class="grid grid-cols-[auto_1fr_auto] items-center gap-x-2">
+              <label htmlFor="toleranceVar" class="text-right">
                 Distance:
               </label>
               <input
@@ -206,16 +196,14 @@ export default function ImageGallery() {
                 step="0.03"
                 value={toleranceVar}
                 onChange={handleToleranceVarChange}
-                class="" /* Grid handles sizing */
+                class=""
               />
-              <span class="text-left">{toleranceVar}</span> {/* Rely on grid column */}
+              <span class="text-left">{toleranceVar}</span>
             </div>
           </div>
-          {/* Age Input Group (Vertical) */}
-          <div class="flex flex-col space-y-4"> {/* Wrap age inputs in a flex-col div */}
-            {/* Min Age Input */}
+          <div class="flex flex-col space-y-4">
             <div class="flex items-center">
-              <label htmlFor="minAge" class="mr-2 w-16 text-right shrink-0"> {/* Fixed width */}
+              <label htmlFor="minAge" class="mr-2 w-16 text-right shrink-0">
                 Min Age:
               </label>
               <input
@@ -225,12 +213,11 @@ export default function ImageGallery() {
                 max="100"
                 value={minAge}
                 onChange={(e) => setMinAge(Number((e.target as HTMLInputElement).value))}
-                class="w-16 text-center" /* Fixed width */
+                class="w-16 text-center"
               />
             </div>
-            {/* Max Age Input */}
             <div class="flex items-center">
-              <label htmlFor="maxAge" class="mr-2 w-16 text-right shrink-0"> {/* Fixed width */}
+              <label htmlFor="maxAge" class="mr-2 w-16 text-right shrink-0">
                 Max Age:
               </label>
               <input
@@ -240,13 +227,17 @@ export default function ImageGallery() {
                 max="100"
                 value={maxAge}
                 onChange={(e) => setMaxAge(Number((e.target as HTMLInputElement).value))}
-                class="w-16 text-center" /* Fixed width */
+                class="w-16 text-center"
               />
             </div>
           </div>
         </div>
       </div>
-
+      {uploadStatus && (
+            <div class="mb-4 text-center text-sm text-gray-600 dark:text-gray-300">
+              {uploadStatus}
+            </div>
+          )}
       {uploadedImage && (
         <div class="mb-6 flex flex-col items-center">
           <h2 class="text-xl font-bold mb-3 text-center">Uploaded Image:</h2>
@@ -258,24 +249,18 @@ export default function ImageGallery() {
         </div>
       )}
 
-      {/* Reverted Results Area Logic */}
       <div class="mt-6 text-center">
         {loading ? (
-          <div>Loading results...</div> // Simple loading message
+          <div>Loading results...</div>
         ) : error ? (
-          <div class="text-red-500">Error: {error}</div> // Error message
-        ) : apiCalled ? ( // Only show results/no results after API call attempt
+          <div class="text-red-500">Error: {error}</div>
+        ) : apiCalled ? (
           encodedFaces.length === 0 ? (
-            <div>
-              No similar faces found within the specified distance and age range. Try adjusting the parameters.
-            </div> // No results message
+            <div>No similar faces found. Try adjusting the parameters.</div>
           ) : (
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {encodedFaces.map((face) => (
-                <div
-                  key={face.id}
-                  class="card p-3" // Use card class, removed bg-white dark:bg-gray-500
-                >
+                <div key={face.id} class="card p-3">
                   <h2 class="text-lg font-bold mb-1">{face.name}</h2>
                   <p class="text-xs font-medium mb-2">Distance = {face.distance}</p>
                   <img
@@ -285,10 +270,9 @@ export default function ImageGallery() {
                   />
                 </div>
               ))}
-            </div> // Results grid
+            </div>
           )
         ) : (
-          // Initial placeholder only if no image is uploaded and API hasn't been called
           !uploadedImage && (
             <div class="flex flex-col items-center">
               Upload an image to get started.
