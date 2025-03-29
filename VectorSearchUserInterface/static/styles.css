@@ -3,12 +3,154 @@
 @tailwind utilities;
 @import url('https://fonts.googleapis.com/css2?family=Exo:ital,wght@0,100..900;1,100..900&display=swap');
 
+/* --- Base & Typography --- */
+html {
+  scroll-behavior: smooth;
+}
 
-  
+body {
+  @apply exo-regular min-h-screen text-gray-200; /* Default text color for dark theme */
+  background-color: #0a0f1f; /* Fallback */
+  /* Use CSS variables for cursor position, default to center */
+  /* Radial gradient is now positioned by --x and --y */
+  background-image: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(119, 71, 255, 0.4) 0%, rgba(119, 71, 255, 0) 70%),
+                    linear-gradient(45deg, #0a0f1f 0%, #101730 100%);
+  /* background-size is no longer needed for this effect */
+  /* animation: gradient-shift 20s ease infinite; */ /* Removed animation */
+  /* overflow: hidden; */ /* Removed to prevent content cutoff */
+  position: relative;
+}
+
+/* Removed gradient-shift keyframes */
+
 .exo-regular {
-    font-family: "Exo", sans-serif;
-    font-optical-sizing: auto;
-    font-weight:400;
-    font-style: normal;
-  }
-  
+  font-family: "Exo", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+h1 {
+  @apply text-4xl font-bold mb-6 bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+/* Removed unused .modern-gradient-text class */
+
+h2 {
+   @apply text-xl font-bold mb-3 text-center text-gray-100;
+}
+
+label {
+  @apply text-sm font-medium text-gray-300;
+}
+
+/* --- Layout & Containers --- */
+
+/* Overriding the Search.tsx container background via CSS */
+/* Note: Tailwind classes bg-zinc-200 dark:bg-zinc-700 are still in Search.tsx but will be less specific */
+.container {
+  @apply max-w-6xl mx-auto p-4 sm:p-6 md:p-10 relative;
+  /* Changed background to semi-transparent dark zinc */
+  background-color: rgba(39, 39, 42, 0.6); /* zinc-800 with 60% opacity */
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1.5rem; /* 24px */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  /* Ensure text color inside container is light */
+  color: theme('colors.gray.100');
+}
+
+/* Style the header within Search.tsx */
+header.sticky {
+  @apply bg-transparent backdrop-blur-none border-b border-gray-300/20 dark:border-gray-600/20;
+  /* Remove default background to let body background show */
+  background-color: transparent !important;
+}
+
+/* Style the result cards */
+.card { /* Assuming this class is used for result items */
+  @apply rounded-lg overflow-hidden shadow-lg p-4 transition-all duration-300;
+  /* Changed background to semi-transparent dark zinc */
+  background-color: rgba(63, 63, 70, 0.5); /* zinc-700 with 50% opacity */
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(5px);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+  /* Changed hover background to semi-transparent dark blood red */
+  background-color: rgba(127, 29, 29, 0.6); /* Approx red-900 with 60% opacity */
+}
+
+.card h2 { /* Name inside card */
+   @apply text-lg font-bold mb-1 text-gray-50; /* Lighter text for card */
+}
+
+.card p { /* Distance inside card */
+   @apply text-xs font-medium mb-2 text-gray-300;
+}
+
+/* --- Controls & Buttons --- */
+
+button {
+  @apply px-5 py-2 rounded-lg font-medium transition-all duration-300 ease-in-out relative overflow-hidden;
+  /* Changed base gradient to red */
+  background: linear-gradient(45deg, theme('colors.red.500'), theme('colors.red.700'));
+  color: white;
+  border: 1px solid theme('colors.red.800'); /* Adjusted border color */
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4); /* Slightly stronger shadow */
+  box-shadow: 0 3px 6px rgba(0,0,0,0.25); /* Slightly stronger shadow */
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 14px rgba(0,0,0,0.3); /* Enhanced shadow */
+  filter: brightness(1.05); /* Slightly adjust brightness */
+  /* Changed hover background to dark blood red gradient */
+  background: linear-gradient(45deg, theme('colors.red.800'), theme('colors.red.900'));
+}
+
+button:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+/* Specific button adjustments if needed */
+/* Example: Upload button */
+/* button:contains("Upload Image") { ... } */ /* CSS doesn't have :contains */
+
+/* Style range inputs */
+input[type="range"] {
+  @apply h-2 rounded-lg appearance-none cursor-pointer;
+  /* Changed background to red gradient */
+  background: linear-gradient(to right, theme('colors.red.500'), theme('colors.red.700'));
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  @apply appearance-none w-5 h-5 rounded-full cursor-pointer;
+  /* Changed thumb color to red */
+  background-color: theme('colors.red.300');
+  box-shadow: 0 0 5px rgba(252, 165, 165, 0.6); /* Adjusted shadow color */
+}
+
+input[type="range"]::-moz-range-thumb {
+  @apply w-5 h-5 rounded-full cursor-pointer border-none;
+  /* Changed thumb color to red */
+  background-color: theme('colors.red.300');
+  box-shadow: 0 0 5px rgba(252, 165, 165, 0.6); /* Adjusted shadow color */
+}
+
+/* Style number inputs */
+input[type="number"] {
+  @apply mr-2 p-1 rounded border border-gray-500 bg-gray-700 text-gray-100 focus:outline-none focus:ring-2 focus:ring-red-400; /* Changed focus ring to red */
+}
+
+/* --- Dark Mode Specifics (Tailwind handles most via 'dark:') --- */
+/* Add any specific overrides if Tailwind's dark mode isn't sufficient */
+
+/* Ensure text within controls section is readable */
+.controls-section label, .controls-section span { /* Add a wrapper class if needed */
+  color: theme('colors.gray.200');
+}

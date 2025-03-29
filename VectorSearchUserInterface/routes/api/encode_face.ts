@@ -30,7 +30,7 @@ export const handler = async (
     }
 
     // Externalize the apiUrl using Deno.env.get
-    let apiUrl = Deno.env.get("API_URL") || "http://129.80.96.10:8080/encode_face" // Provide a default value
+    let apiUrl = Deno.env.get("API_URL") || "http://129.213.111.63:8080/encode_face" // Provide a default value
     //let apiUrl = "http://129.80.96.10:8080/encode_face";
     //let apiUrl = "http://localhost:8080/encode_face";
     const urlParams = new URLSearchParams();

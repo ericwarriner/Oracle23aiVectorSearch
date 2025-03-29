@@ -20,7 +20,9 @@ export default function ImageGallery() {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [minAge, setMinAge] = useState(20);
   const [maxAge, setMaxAge] = useState(80);
+  const [isHeaderSticky, setIsHeaderSticky] = useState(true); // State for dynamic sticky header
 
+  // Effect for dark mode toggle
   useEffect(() => {
     if (isDarkMode) {
       document.documentElement.classList.add("dark");
@@ -29,6 +31,23 @@ export default function ImageGallery() {
     }
   }, [isDarkMode]);
 
+  // Effect for dynamic sticky header
+  useEffect(() => {
+    const handleScroll = () => {
+      // Make header sticky only when scrolled near the top
+      setIsHeaderSticky(window.scrollY < 10);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Initial check
+
+    // Cleanup listener on unmount
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []); // Empty dependency array ensures this runs once on mount
+
+  // Effect for fetching images
   useEffect(() => {
     async function fetchImages() {
       if (!uploadedImage) return;
@@ -70,11 +89,12 @@ export default function ImageGallery() {
   const toggleDarkMode = () => setIsDarkMode((prev) => !prev);
 
   return (
-    <div class="min-h-screen container mx-auto p-4 sm:p-6 md:p-10 bg-zinc-200 dark:bg-zinc-700 text-gray-900 dark:text-gray-100 transition-colors duration-200 drop-shadow-xl">
-      {/* Sticky Title Bar */}
-      <header class="sticky top-0 z-50 bg-zinc-200 dark:bg-zinc-700 px-4 py-2 mb-6 flex flex-col items-center border-b border-gray-300 dark:border-gray-600">
+    <div class="min-h-screen container mx-auto p-4 sm:p-6 md:p-10 text-gray-900 dark:text-gray-100 transition-colors duration-200 drop-shadow-xl"> {/* Removed bg-zinc-200 dark:bg-zinc-700 */}
+      {/* Dynamically Sticky Title Bar */}
+      <header class={`px-4 py-2 mb-6 flex flex-col items-center border-b border-gray-300 dark:border-gray-600 ${isHeaderSticky ? 'sticky top-0 z-50' : ''}`}> {/* Conditional sticky classes */}
         <img src="/oracle.svg" alt="Logo" class="w-96 h-40" />
-        <h1 class="text-4xl font-bold text-center exo-regular">
+        {/* Removed gradient class, added text-white */}
+        <h1 class="text-4xl font-bold text-center exo-regular text-white">
           Vector Search powered by a Oracle 23ai Converged Database
         </h1>
       </header>
@@ -82,17 +102,17 @@ export default function ImageGallery() {
       <div class="flex flex-col sm:flex-row items-center justify-between mb-6 space-y-4 sm:space-y-0">
         {/* Left Group: Upload Button Only */}
         <div class="flex items-center space-x-4">
-          <button
+          <button // Updated hover effect to dark red gradient
             type="button"
             onClick={handleButtonClick}
-            class="p-2 rounded-full bg-blue-500 text-white transition duration-200 ease-in-out  dark:hover:border-white hover:border-red-500 hover:border-2"
+            class="px-5 py-2 rounded-lg font-medium text-white bg-gradient-to-r from-red-500 to-red-700 border border-red-800 shadow-md transition-all duration-200 ease-in-out hover:from-red-700 hover:to-red-900"
           >
             Upload Image
           </button>
           <input
             type="file"
             accept="image/*"
-            onChange={(e) => {
+            onChange={(e) => { // Reverted to original inline handler
               const file = (e.target as HTMLInputElement).files?.[0];
               if (file) {
                 const reader = new FileReader();
@@ -107,8 +127,8 @@ export default function ImageGallery() {
             ref={fileInputRef}
           />
         </div>
-        {/* Right Group: Sliders and Dark Mode Toggle */}
-        <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-6">
+        {/* Right Group: Sliders and Dark Mode Toggle - Added sm:ml-8 for spacing */}
+        <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-6 sm:ml-8">
           <div class="flex items-center">
             <label htmlFor="numRows" class="mr-2">
               Number of Rows:
@@ -152,7 +172,7 @@ export default function ImageGallery() {
               max="100"
               value={minAge}
               onChange={(e) => setMinAge(Number((e.target as HTMLInputElement).value))}
-              class="mr-2 text-gray-900 dark:text-gray-900"
+              class="mr-2" // Removed text-gray-900 dark:text-gray-900
             />
             <label htmlFor="maxAge" class="ml-4 mr-2">
               Max Age:
@@ -164,14 +184,14 @@ export default function ImageGallery() {
               max="100"
               value={maxAge}
               onChange={(e) => setMaxAge(Number((e.target as HTMLInputElement).value))}
-              class="mr-2 text-gray-900 dark:text-gray-900"
+              class="mr-2" // Removed text-gray-900 dark:text-gray-900
             />
           </div>
           <div class="flex items-center">
-            <button
+            <button // Updated hover effect to dark red gradient
               type="button"
               onClick={toggleDarkMode}
-              class="p-2 rounded-full bg-blue-500 text-white transition duration-200 ease-in-out  dark:hover:border-white hover:border-red-500 hover:border-2"
+              class="px-5 py-2 rounded-lg font-medium text-white bg-gradient-to-r from-red-500 to-red-700 border border-red-800 shadow-md transition-all duration-200 ease-in-out hover:from-red-700 hover:to-red-900"
             >
               {isDarkMode ? "Light Mode" : "Dark Mode"}
             </button>
@@ -202,7 +222,7 @@ export default function ImageGallery() {
             {encodedFaces.map((face) => (
               <div
                 key={face.id}
-                class="rounded-lg overflow-hidden shadow-md bg-white dark:bg-gray-500 p-3"
+                class="card p-3" // Use card class, removed bg-white dark:bg-gray-500
               >
                 <h2 class="text-lg font-bold mb-1">{face.name}</h2>
                 <p class="text-xs font-medium mb-2">Distance = {face.distance}</p>
@@ -216,6 +236,7 @@ export default function ImageGallery() {
           </div>
         )
       ) : (
+        // Reverted to original placeholder
         <div class="text-center flex flex-col items-center">
           Upload an image to get started.
           <img class="mt-2" src="/23ai.png" alt="23ai" />
