@@ -61,7 +61,7 @@ export const handler = async (
 
     if (!response.ok) {
       console.error(`HTTP error! status1: ${response.json}`);
-      return new Response("Failed to encode a face", { status: 500 });
+      return new Response("Failed to encode facial image", { status: 500 });
     }
 
     const data = await response.json();
@@ -71,7 +71,7 @@ export const handler = async (
       },
     });
   } catch (error) {
-    console.error("Error encoding face3:", error);
-    return new Response("Failed to encode face2", { status: 500 });
+    console.error("Error encoding facial image:", error);
+    return new Response("Failed to facial image", { status: 500 });
   }
 };
