@@ -21,7 +21,7 @@ export default function ImageGallery() {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [minAge, setMinAge] = useState(20);
   const [maxAge, setMaxAge] = useState(80);
-  const [isHeaderSticky, setIsHeaderSticky] = useState(true); // State for dynamic sticky header
+  // Removed isHeaderSticky state
 
   // Effect for dark mode toggle
   useEffect(() => {
@@ -32,21 +32,7 @@ export default function ImageGallery() {
     }
   }, [isDarkMode]);
 
-  // Effect for dynamic sticky header
-  useEffect(() => {
-    const handleScroll = () => {
-      // Make header sticky only when scrolled near the top
-      setIsHeaderSticky(window.scrollY < 10);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Initial check
-
-    // Cleanup listener on unmount
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []); // Empty dependency array ensures this runs once on mount
+  // Removed effect for dynamic sticky header
 
   async function fetchImages() {
     if (!uploadedImage) {
@@ -107,16 +93,17 @@ export default function ImageGallery() {
   const toggleDarkMode = () => setIsDarkMode((prev) => !prev);
 
   return (
-    <div class="min-h-screen container mx-auto p-4 sm:p-6 md:p-10 text-gray-900 dark:text-gray-100 transition-colors duration-200 drop-shadow-xl">
-      {/* Dynamically Sticky Title Bar */}
-      <header class={`px-4 py-2 mb-6 flex flex-col items-center border-b border-gray-300 dark:border-gray-600 ${isHeaderSticky ? 'sticky top-0 z-50' : ''}`}>
+    <div class="min-h-screen container mx-auto p-4 sm:p-6 md:p-10 bg-gray-300 text-gray-900 dark:text-gray-100 transition-colors duration-200 drop-shadow-xl"> {/* Added bg-gray-300 for light mode */}
+      {/* Title Bar (no longer sticky) */}
+      <header class="px-4 py-2 mb-6 flex flex-col items-center ">
         <img src="/oracle.svg" alt="Logo" class="w-96 h-40" />
         <h1 class="text-4xl font-bold text-center exo-regular text-white">
           Vector Search powered by a Oracle 23ai Converged Database
         </h1>
       </header>
 
-      <div class="flex flex-col sm:flex-row items-start justify-between mb-6 space-y-4 sm:space-y-0">
+      {/* Parent Container with Beveled Edge (Theme-adjusted) */}
+      <div class="flex flex-col sm:flex-row items-start justify-between mb-6 space-y-4 sm:space-y-0 p-4 rounded-lg border border-t-gray-300 dark:border-t-gray-600 border-l-gray-300 dark:border-l-gray-600 border-b-gray-500 dark:border-b-gray-900 border-r-gray-800 dark:border-r-gray-900 bg-zinc-800 dark:bg-zinc-800 shadow-inner">
         <div class="flex flex-col items-center space-y-4">
           <button
             type="button"
@@ -167,9 +154,10 @@ export default function ImageGallery() {
           />
 
         </div>
+        {/* Controls Container (styling moved to parent) */}
         <div class="flex flex-row items-start space-x-6">
           <div class="flex flex-col space-y-4">
-            <div class="grid grid-cols-[auto_1fr_auto] items-center gap-x-2">
+            <div class="grid grid-cols-[auto_1fr_auto] items-center gap-x-2 mt-2">
               <label htmlFor="numRows" class="text-right">
                 Num Rows:
               </label>
@@ -184,7 +172,7 @@ export default function ImageGallery() {
               />
               <span class="text-left">{numRows}</span>
             </div>
-            <div class="grid grid-cols-[auto_1fr_auto] items-center gap-x-2">
+            <div class="grid grid-cols-[auto_1fr_auto] items-center gap-x-2 ">
               <label htmlFor="toleranceVar" class="text-right">
                 Distance:
               </label>
@@ -201,6 +189,7 @@ export default function ImageGallery() {
               <span class="text-left">{toleranceVar}</span>
             </div>
           </div>
+          {/* Age Controls Container */}
           <div class="flex flex-col space-y-4">
             <div class="flex items-center">
               <label htmlFor="minAge" class="mr-2 w-16 text-right shrink-0">
@@ -244,7 +233,7 @@ export default function ImageGallery() {
           <img
             src={uploadedImage}
             alt="Uploaded"
-            class="w-64 sm:w-80 md:w-96 h-auto rounded-lg border border-gray-300 dark:border-gray-600 mx-auto shadow-lg"
+            class="w-64 sm:w-80 md:w-96 h-auto rounded-lg border border-gray-300 dark:border-gray-600 mx-auto shadow-lg card"
           />
         </div>
       )}
