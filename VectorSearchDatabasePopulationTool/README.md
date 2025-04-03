@@ -39,7 +39,7 @@ sudo apt-get install -y libx11-dev libgtk-3-dev
 ```
 
 ## 📦 Dependencies
-
+Please be sure your system has Python >3 and PIP installed.
 The following Python packages are required:
 
 - `numpy`
